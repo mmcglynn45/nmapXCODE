@@ -2507,15 +2507,14 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                 range_type = SCAN_PROTOCOLS;
                 continue;
             }
+            if (*current_range == 'X' && *++current_range == ':') {
+                current_range++;
+                range_type = NO_SCAN;
+                continue;
+            }
 
         }
         
-        if (*current_range == 'X') {
-            current_range++;
-            printf("found the X\n");
-            exclude = 1;
-            continue;
-        }
         if (*current_range == '[') {
             if (nested)
                 fatal("Can't nest [] brackets in port/protocol specification");
