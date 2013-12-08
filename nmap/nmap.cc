@@ -2646,6 +2646,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                         if ((range_type & NO_SCAN)){
                             porttbl[rangestart] = 0;
                             porttbl[rangestart] |= NO_SCAN;
+                            printf("port %i gone\n", rangestart);
                         }
                         
                     } else {
