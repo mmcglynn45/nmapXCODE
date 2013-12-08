@@ -2621,19 +2621,19 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                 if (nested) {
                     if ((range_type & SCAN_TCP_PORT) &&
                         nmap_getservbyport(rangestart, "tcp")) {
-                        porttbl[rangestart] |= SCAN_TCP_PORT;
+                        if(!exclude)porttbl[rangestart] |= SCAN_TCP_PORT;
                     }
                     if ((range_type & SCAN_UDP_PORT) &&
                         nmap_getservbyport(rangestart, "udp")) {
-                        porttbl[rangestart] |= SCAN_UDP_PORT;
+                        if(!exclude)porttbl[rangestart] |= SCAN_UDP_PORT;
                     }
                     if ((range_type & SCAN_SCTP_PORT) &&
                         nmap_getservbyport(rangestart, "sctp")) {
-                        porttbl[rangestart] |= SCAN_SCTP_PORT;
+                        if(!exclude)porttbl[rangestart] |= SCAN_SCTP_PORT;
                     }
                     if ((range_type & SCAN_PROTOCOLS) &&
                         nmap_getprotbynum(rangestart)) {
-                        porttbl[rangestart] |= SCAN_PROTOCOLS;
+                        if(!exclude)porttbl[rangestart] |= SCAN_PROTOCOLS;
                     }
                 } else {
                     porttbl[rangestart] |= range_type;
