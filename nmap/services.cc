@@ -427,7 +427,7 @@ static bool is_port_member(const struct scan_lists *ptsdata, const struct servic
 // This function doesn't support IP protocol scan so only call this
 // function if o.TCPScan() || o.UDPScan() || o.SCTPScan()
 
-void gettoppts(double level, char *portlist, struct scan_lists * ports) {
+void gettoppts(double level, char *portlist, struct scan_lists * ports, double LevelMax = -1) {
   int ti=0, ui=0, si=0;
   struct scan_lists ptsdata = { 0 };
   bool ptsdata_initialized = false;
@@ -540,6 +540,35 @@ void gettoppts(double level, char *portlist, struct scan_lists * ports) {
       else if (o.SCTPScan() && strcmp(current->s_proto, "sctp") == 0 && si < ports->sctp_count)
         ports->sctp_ports[si++] = current->s_port;
     }
+    
+    if(maxLevel!=-1){
+        if (o.TCPScan()) {
+            ports->tcp_count = MIN((int) maxLevel - level, numtcpports);
+            ports->tcp_ports = (unsigned short *)safe_zalloc(ports->tcp_count * sizeof(unsigned short));
+        }
+        if (o.UDPScan()) {
+            ports->udp_count = MIN((int) maxLevel - level, numudpports);
+            ports->udp_ports = (unsigned short *)safe_zalloc(ports->udp_count * sizeof(unsigned short));
+        }
+        if (o.SCTPScan()) {
+            ports->sctp_count = MIN((int)maxLevel-level, numsctpports);
+            ports->sctp_ports = (unsigned short *)safe_zalloc(ports->sctp_count * sizeof(unsigned short));
+        }
+        
+        ports->prots = NULL;
+        
+        for (i = services_by_ratio.begin()+level; i != services_by_ratio.end(); i++) {
+            current = &(*i);
+            if (ptsdata_initialized && !is_port_member(&ptsdata, current))
+                continue;
+            if (o.TCPScan() && strcmp(current->s_proto, "tcp") == 0 && ti < ports->tcp_count)
+                ports->tcp_ports[ti++] = current->s_port;
+            else if (o.UDPScan() && strcmp(current->s_proto, "udp") == 0 && ui < ports->udp_count)
+                ports->udp_ports[ui++] = current->s_port;
+            else if (o.SCTPScan() && strcmp(current->s_proto, "sctp") == 0 && si < ports->sctp_count)
+                ports->sctp_ports[si++] = current->s_port;
+        }
+    }
 
     if (ti < ports->tcp_count) ports->tcp_count = ti;
     if (ui < ports->udp_count) ports->udp_count = ui;
@@ -566,4 +595,5 @@ void gettoppts(double level, char *portlist, struct scan_lists * ports) {
   else if (o.debugging && level >= 1)
     log_write(LOG_STDOUT, "PORTS: Using top %d ports found open (TCP:%d, UDP:%d, SCTP:%d)\n", (int) level, ports->tcp_count, ports->udp_count, ports->sctp_count);
 }
+
 
