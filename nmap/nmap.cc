@@ -2507,9 +2507,9 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                 range_type = SCAN_PROTOCOLS;
                 continue;
             }
-            if (*current_range == '!' && *++current_range == ':') {
+            if (*current_range == 'X' && *++current_range == ':') {
                 current_range++;
-                printf("found the !\n");
+                printf("found the X\n");
                 exclude = 1;
                 continue;
             }
