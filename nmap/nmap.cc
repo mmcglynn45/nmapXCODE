@@ -2355,7 +2355,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                        int *portwarning, bool change_range_type = true);
 
 void getpts(const char *origexpr, struct scan_lists *ports) {
-  u8 *porttbl;
+  //u8 *porttbl;
   int range_type = 0;
   int portwarning = 0;
   int i, tcpi, udpi, sctpi, proti;
