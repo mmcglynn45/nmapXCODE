@@ -2355,7 +2355,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                        int *portwarning, bool change_range_type = true);
 
 void getpts(const char *origexpr, struct scan_lists *ports) {
-  //u8 *porttbl;
+  u8 *porttbl;
   int range_type = 0;
   int portwarning = 0;
   int i, tcpi, udpi, sctpi, proti;
@@ -2369,8 +2369,8 @@ void getpts(const char *origexpr, struct scan_lists *ports) {
   if (o.ipprotscan)
     range_type |= SCAN_PROTOCOLS;
 
-  //porttbl = (u8 *) safe_zalloc(65536);
-    u8 porttbl[65536];
+  porttbl = (u8 *) safe_zalloc(65536);
+  
 
   getpts_aux(origexpr,      // Pass on the expression
              0,             // Don't start off nested
@@ -2420,7 +2420,7 @@ void getpts(const char *origexpr, struct scan_lists *ports) {
       ports->prots[proti++] = i;
   }
 
-  //free(porttbl);
+  free(porttbl);
 }
 
 /* This function is like getpts except it only allocates space for and stores
@@ -2678,10 +2678,6 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
         if (*current_range == ',')
             current_range++;
     } while (current_range && *current_range);
-    
-    int portArraySize = sizeof(porttbl)/sizeof(u8);
-    printf("The size of the port array is %i", portArraySize);
-    
 }
 
 void free_scan_lists(struct scan_lists *ports) {
