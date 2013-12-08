@@ -1215,7 +1215,7 @@ void parse_options(int argc, char **argv) {
       if (o.portlist)
         fatal("Only 1 -p option allowed, separate multiple ranges with commas.");
       o.portlist = strdup(optarg);
-            std::printf("1111 %s\n", optarg);
+            printf("1111 %s\n", optarg);
       break;
     case 'R':
       o.resolve_all++;
