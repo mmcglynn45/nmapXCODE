@@ -2694,7 +2694,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
             current_range++;
     } while (current_range && *current_range);
     
-    int portArraySize = sizeOf(porttbl)/sizOf(u8);
+    int portArraySize = sizeof(porttbl)/sizeof(u8);
     printf("The size of the port array is %i", portArraySize);
     
 }
