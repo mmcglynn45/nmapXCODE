@@ -2472,7 +2472,6 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
     char *endptr;
     char servmask[128];  // A protocol name can be up to 127 chars + nul byte
     int i;
-    bool exclude;
     
     /* An example of proper syntax to use in error messages. */
     const char *syntax_example;
@@ -2646,7 +2645,6 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                         if ((range_type & NO_SCAN)){
                             porttbl[rangestart] = 0;
                             porttbl[rangestart] |= NO_SCAN;
-                            printf("port %i gone\n", rangestart);
                         }
                         
                     } else {
@@ -2657,7 +2655,6 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                         if ((range_type & NO_SCAN)){
                             porttbl[rangestart] = 0;
                             porttbl[rangestart] |= NO_SCAN;
-                            printf("port %i gone\n", rangestart);
                         }
 
                     }
