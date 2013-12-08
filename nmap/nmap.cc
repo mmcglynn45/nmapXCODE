@@ -936,10 +936,8 @@ void parse_options(int argc, char **argv) {
         } else if (optcmp(long_options[option_index].name, "top-ports") == 0) {
           char *ptr;
           o.topportlevel = strtod(optarg, &ptr);
-          ptr++;
-          o.maxportlevel = strtod(ptr, NULL);
           if (!ptr || o.topportlevel < 1 || ((double)((int)o.topportlevel)) != o.topportlevel)
-            fatal("--top-ports range should be an integer 1 or greater");
+            fatal("--top-ports should be an integer 1 or greater");
         } else if (optcmp(long_options[option_index].name, "ip-options") == 0) {
           o.ipoptions    = (u8*) safe_malloc(4 * 10 + 1);
           if ( (o.ipoptionslen = parse_ip_options(optarg, o.ipoptions, 4 * 10 + 1, &o.ipopt_firsthop, &o.ipopt_lasthop, errstr, sizeof(errstr))) == OP_FAILURE)
@@ -1486,7 +1484,7 @@ void  apply_delayed_options() {
     else
       getpts((char *) (o.fastscan ? "[P:0-]" : "0-"), &ports);  // Default protocols to scan
   } else if (!o.noportscan) {
-    gettoppts(o.topportlevel, o.portlist, &ports, 20);
+    gettoppts(o.topportlevel, o.portlist, &ports);
   }
 
   // Uncomment the following line to use the common lisp port spec test suite
@@ -2372,7 +2370,6 @@ void getpts(const char *origexpr, struct scan_lists *ports) {
     range_type |= SCAN_PROTOCOLS;
 
   porttbl = (u8 *) safe_zalloc(65536);
-  
 
   getpts_aux(origexpr,      // Pass on the expression
              0,             // Don't start off nested
@@ -2475,6 +2472,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
     char *endptr;
     char servmask[128];  // A protocol name can be up to 127 chars + nul byte
     int i;
+    bool exclude;
     
     /* An example of proper syntax to use in error messages. */
     const char *syntax_example;
@@ -2648,6 +2646,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                         if ((range_type & NO_SCAN)){
                             porttbl[rangestart] = 0;
                             porttbl[rangestart] |= NO_SCAN;
+                            printf("port %i gone\n", rangestart);
                         }
                         
                     } else {
@@ -2658,6 +2657,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                         if ((range_type & NO_SCAN)){
                             porttbl[rangestart] = 0;
                             porttbl[rangestart] |= NO_SCAN;
+                            printf("port %i gone\n", rangestart);
                         }
 
                     }
@@ -2680,6 +2680,10 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
         if (*current_range == ',')
             current_range++;
     } while (current_range && *current_range);
+    
+    int portArraySize = sizeof(porttbl)/sizeof(u8);
+    printf("The size of the port array is %i", portArraySize);
+    
 }
 
 void free_scan_lists(struct scan_lists *ports) {

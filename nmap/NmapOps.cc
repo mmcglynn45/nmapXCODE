@@ -366,7 +366,6 @@ void NmapOps::Initialize() {
   ipopt_lasthop  = 0;  
   release_memory = false;
   topportlevel = -1;
-  maxportlevel = -1;
 #ifndef NOLUA
   script = 0;
   scriptargs = NULL;
