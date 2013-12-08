@@ -2473,7 +2473,6 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
     char *endptr;
     char servmask[128];  // A protocol name can be up to 127 chars + nul byte
     int i;
-    bool exclude;
     
     /* An example of proper syntax to use in error messages. */
     const char *syntax_example;
