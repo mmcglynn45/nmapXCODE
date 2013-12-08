@@ -557,8 +557,8 @@ void gettoppts(double level, char *portlist, struct scan_lists * ports, double m
         
         ports->prots = NULL;
         
-        for (i = services_by_ratio.begin()+level; i != services_by_ratio.end(); i++) {
-            current = &(*i);
+        for (i = services_by_ratio.begin().++(level); i != services_by_ratio.end(); i++) {
+            current = &(*i);i.
             if (ptsdata_initialized && !is_port_member(&ptsdata, current))
                 continue;
             if (o.TCPScan() && strcmp(current->s_proto, "tcp") == 0 && ti < ports->tcp_count)
