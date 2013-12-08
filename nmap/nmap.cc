@@ -2610,38 +2610,43 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
             fatal("Error #487: Your port specifications are illegal.  Example of proper form: \"%s\"", syntax_example);
         }
         
-        /* Now I have a rangestart and a rangeend, so I can add these ports */
-        while (rangestart <= rangeend) {
-            if (porttbl[rangestart] & range_type) {
-                if (!(*portwarning)) {
-                    error("WARNING: Duplicate port number(s) specified.  Are you alert enough to be using Nmap?  Have some coffee or Jolt(tm).");
-                    (*portwarning)++;
-                }
-            } else {
-                if (nested) {
-                    if ((range_type & SCAN_TCP_PORT) &&
-                        nmap_getservbyport(rangestart, "tcp")) {
-                        if(!exclude)porttbl[rangestart] |= SCAN_TCP_PORT;
-                    }
-                    if ((range_type & SCAN_UDP_PORT) &&
-                        nmap_getservbyport(rangestart, "udp")) {
-                        if(!exclude)porttbl[rangestart] |= SCAN_UDP_PORT;
-                    }
-                    if ((range_type & SCAN_SCTP_PORT) &&
-                        nmap_getservbyport(rangestart, "sctp")) {
-                        if(!exclude)porttbl[rangestart] |= SCAN_SCTP_PORT;
-                    }
-                    if ((range_type & SCAN_PROTOCOLS) &&
-                        nmap_getprotbynum(rangestart)) {
-                        if(!exclude)porttbl[rangestart] |= SCAN_PROTOCOLS;
+        if(!exclude) {
+            /* Now I have a rangestart and a rangeend, so I can add these ports */
+            while (rangestart <= rangeend) {
+                if (porttbl[rangestart] & range_type) {
+                    if (!(*portwarning)) {
+                        error("WARNING: Duplicate port number(s) specified.  Are you alert enough to be using Nmap?  Have some coffee or Jolt(tm).");
+                        (*portwarning)++;
                     }
                 } else {
-                    porttbl[rangestart] |= range_type;
+                    if (nested) {
+                        if ((range_type & SCAN_TCP_PORT) &&
+                            nmap_getservbyport(rangestart, "tcp")) {
+                            porttbl[rangestart] |= SCAN_TCP_PORT;
+                        }
+                        if ((range_type & SCAN_UDP_PORT) &&
+                            nmap_getservbyport(rangestart, "udp")) {
+                            porttbl[rangestart] |= SCAN_UDP_PORT;
+                        }
+                        if ((range_type & SCAN_SCTP_PORT) &&
+                            nmap_getservbyport(rangestart, "sctp")) {
+                            porttbl[rangestart] |= SCAN_SCTP_PORT;
+                        }
+                        if ((range_type & SCAN_PROTOCOLS) &&
+                            nmap_getprotbynum(rangestart)) {
+                            porttbl[rangestart] |= SCAN_PROTOCOLS;
+                        }
+                    } else {
+                        porttbl[rangestart] |= range_type;
+                    }
                 }
+                rangestart++;
             }
-            rangestart++;
         }
-        
+        else {
+            exclude = 0;
+        }
+    
         /* Find the next range */
         while (isspace((int) (unsigned char) *current_range)) current_range++;
         
