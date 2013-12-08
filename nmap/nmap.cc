@@ -2644,7 +2644,38 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
             }
         }
         else {
+            while (rangestart <= rangeend) {
+                if (porttbl[rangestart] & range_type) {
+                    if (!(*portwarning)) {
+                        error("WARNING: Duplicate port number(s) specified.  Are you alert enough to be using Nmap?  Have some coffee or Jolt(tm).");
+                        (*portwarning)++;
+                    }
+                } else {
+                    if (nested) {
+                        if ((range_type & SCAN_TCP_PORT) &&
+                            nmap_getservbyport(rangestart, "tcp")) {
+                            porttbl[rangestart] = 0;
+                        }
+                        if ((range_type & SCAN_UDP_PORT) &&
+                            nmap_getservbyport(rangestart, "udp")) {
+                            porttbl[rangestart] = 0;
+                        }
+                        if ((range_type & SCAN_SCTP_PORT) &&
+                            nmap_getservbyport(rangestart, "sctp")) {
+                            porttbl[rangestart] = 0;
+                        }
+                        if ((range_type & SCAN_PROTOCOLS) &&
+                            nmap_getprotbynum(rangestart)) {
+                            porttbl[rangestart] = 0;
+                        }
+                    } else {
+                        porttbl[rangestart] |= range_type;
+                    }
+                }
+                rangestart++;
+            }
             exclude = 0;
+
         }
     
         /* Find the next range */
@@ -2665,6 +2696,7 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
     
     int portArraySize = sizeOf(porttbl)/sizOf(u8);
     printf("The size of the port array is %i", portArraySize);
+    
 }
 
 void free_scan_lists(struct scan_lists *ports) {
