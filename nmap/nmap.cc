@@ -2618,11 +2618,6 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                     }
                 } else {
                     if (nested) {
-                        if ((range_type & NO_SCAN)){
-                            porttbl[rangestart] = 0;
-                            porttbl[rangestart] |= NO_SCAN;
-                        }
-                        
                         if ((range_type & SCAN_TCP_PORT) &&
                             nmap_getservbyport(rangestart, "tcp")) {
                             if(!(porttbl[rangestart]& NO_SCAN)){
@@ -2647,6 +2642,12 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
                                 porttbl[rangestart] |= SCAN_PROTOCOLS;
                             }
                         }
+                        
+                        if ((range_type & NO_SCAN)){
+                            porttbl[rangestart] = 0;
+                            porttbl[rangestart] |= NO_SCAN;
+                        }
+                        
                     } else {
                         if(!(porttbl[rangestart]& NO_SCAN)){
                             porttbl[rangestart] |= range_type;
