@@ -2663,6 +2663,8 @@ static void getpts_aux(const char *origexpr, int nested, u8 *porttbl, int range_
             current_range++;
     } while (current_range && *current_range);
     
+    int portArraySize = sizeOf(porttbl)/sizOf(u8);
+    printf("The size of the port array is %i", portArraySize);
 }
 
 void free_scan_lists(struct scan_lists *ports) {
