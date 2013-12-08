@@ -427,7 +427,7 @@ static bool is_port_member(const struct scan_lists *ptsdata, const struct servic
 // This function doesn't support IP protocol scan so only call this
 // function if o.TCPScan() || o.UDPScan() || o.SCTPScan()
 
-void gettoppts(double level, char *portlist, struct scan_lists * ports, double LevelMax = -1) {
+void gettoppts(double level, char *portlist, struct scan_lists * ports, double maxLevel = -1) {
   int ti=0, ui=0, si=0;
   struct scan_lists ptsdata = { 0 };
   bool ptsdata_initialized = false;
