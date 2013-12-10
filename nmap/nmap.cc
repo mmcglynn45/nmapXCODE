@@ -2453,7 +2453,7 @@ void getpts_simple(const char *origexpr, int range_type,
         }
     }
     
-    cout << "count : " << *count << "     size of vector: " << portVector.size() << endl;
+    std::cout << "count : " << *count << "     size of vector: " << portVector.size() << std::endl;
     
     if (portVector.size() == 0) {
         free(porttbl);
