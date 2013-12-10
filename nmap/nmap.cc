@@ -2449,7 +2449,7 @@ void getpts_simple(const char *origexpr, int range_type,
         if (porttbl[i] & range_type)
         {
             portVector.push_back(i);
-            *count++;
+            (*count)++;
         }
     }
     
