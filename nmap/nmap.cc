@@ -2376,21 +2376,41 @@ void getpts(const char *origexpr, struct scan_lists *ports) {
                porttbl,       // Our allocated port table
                range_type,    // Defaults to TCP/UDP/SCTP/Protos
                &portwarning); // No, we haven't warned them about dup ports yet
-    
+    std::vector<int> SCAN_TCP;
+    std::vector<int> SCAN_UDP;
+    std::vector<int> SCAN_SCTP;
+    std::vector<int> SCAN_PROTOS;
     ports->tcp_count = 0;
     ports->udp_count = 0;
     ports->sctp_count = 0;
     ports->prot_count = 0;
     for (i = 0; i <= 65535; i++) {
         if (porttbl[i] & SCAN_TCP_PORT)
-            ports->tcp_count++;
+        {
+            //ports->tcp_count++;
+            SCAN_TCP.push_back(i);
+        }
         if (porttbl[i] & SCAN_UDP_PORT)
-            ports->udp_count++;
+        {
+            //ports->udp_count++;
+            SCAN_UDP.push_back(i);
+        }
         if (porttbl[i] & SCAN_SCTP_PORT)
-            ports->sctp_count++;
+        {
+            //ports->sctp_count++;
+            SCAN_SCTP.push_back(i);
+        }
         if (porttbl[i] & SCAN_PROTOCOLS && i < 256)
-            ports->prot_count++;
+        {
+            //ports->prot_count++;
+            SCAN_PROTOS.push_back(i);
+        }
     }
+    
+    ports->tcp_count = SCAN_TCP.size();
+    ports->udp_count = SCAN_UDP.size();
+    ports->sctp_count = SCAN_SCTP.size();
+    ports->prot_count = SCAN_PROTOS.size();
     
     if (range_type != 0 && 0 == (ports->tcp_count + ports->udp_count + ports->sctp_count + ports->prot_count))
         fatal("No ports specified -- If you really don't want to scan any ports use ping scan...");
@@ -2407,18 +2427,34 @@ void getpts(const char *origexpr, struct scan_lists *ports) {
     if (ports->prot_count) {
         ports->prots = (unsigned short *)safe_zalloc(ports->prot_count * sizeof(unsigned short));
     }
-    
-    for (i = tcpi = udpi = sctpi = proti = 0; i <= 65535; i++) {
-        if (porttbl[i] & SCAN_TCP_PORT)
-            ports->tcp_ports[tcpi++] = i;
-        if (porttbl[i] & SCAN_UDP_PORT)
-            ports->udp_ports[udpi++] = i;
-        if (porttbl[i] & SCAN_SCTP_PORT)
-            ports->sctp_ports[sctpi++] = i;
-        if (porttbl[i] & SCAN_PROTOCOLS && i < 256)
-            ports->prots[proti++] = i;
+    for(i=0;i<SCAN_TCP.size();i++)
+    {
+        ports->tcp_ports[i++] = SCAN_TCP[i];
     }
-    
+    for(i=0;i<SCAN_UDP.size();i++)
+    {
+        ports->udp_ports[i++]=SCAN_UDP[i];
+    }
+    for(i=0;i<SCAN_SCTP.size();i++)
+    {
+        ports->sctp_ports[i++]=SCAN_SCTP[i];
+    }
+    for(i=0;i<SCAN_PROTOS.size();i++)
+    {
+        ports->prots[i++]=SCAN_PROTOS[i];
+    }
+    /*
+     for (i = tcpi = udpi = sctpi = proti = 0; i <= 65535; i++) {
+     if (porttbl[i] & SCAN_TCP_PORT)
+     ports->tcp_ports[tcpi++] = i;
+     if (porttbl[i] & SCAN_UDP_PORT)
+     ports->udp_ports[udpi++] = i;
+     if (porttbl[i] & SCAN_SCTP_PORT)
+     ports->sctp_ports[sctpi++] = i;
+     if (porttbl[i] & SCAN_PROTOCOLS && i < 256)
+     ports->prots[proti++] = i;
+     }
+     */
     free(porttbl);
 }
 
