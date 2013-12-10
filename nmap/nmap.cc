@@ -2376,14 +2376,17 @@ void getpts(const char *origexpr, struct scan_lists *ports) {
                porttbl,       // Our allocated port table
                range_type,    // Defaults to TCP/UDP/SCTP/Protos
                &portwarning); // No, we haven't warned them about dup ports yet
+    
     std::vector<int> SCAN_TCP;
     std::vector<int> SCAN_UDP;
     std::vector<int> SCAN_SCTP;
     std::vector<int> SCAN_PROTOS;
+    
     ports->tcp_count = 0;
     ports->udp_count = 0;
     ports->sctp_count = 0;
     ports->prot_count = 0;
+    
     for (i = 0; i <= 65535; i++) {
         if (porttbl[i] & SCAN_TCP_PORT)
         {
@@ -2427,21 +2430,22 @@ void getpts(const char *origexpr, struct scan_lists *ports) {
     if (ports->prot_count) {
         ports->prots = (unsigned short *)safe_zalloc(ports->prot_count * sizeof(unsigned short));
     }
+    
     for(i=0;i<SCAN_TCP.size();i++)
     {
-        ports->tcp_ports[i++] = SCAN_TCP[i];
+        ports->tcp_ports[i] = SCAN_TCP[i];
     }
     for(i=0;i<SCAN_UDP.size();i++)
     {
-        ports->udp_ports[i++]=SCAN_UDP[i];
+        ports->udp_ports[i]=SCAN_UDP[i];
     }
     for(i=0;i<SCAN_SCTP.size();i++)
     {
-        ports->sctp_ports[i++]=SCAN_SCTP[i];
+        ports->sctp_ports[i]=SCAN_SCTP[i];
     }
     for(i=0;i<SCAN_PROTOS.size();i++)
     {
-        ports->prots[i++]=SCAN_PROTOS[i];
+        ports->prots[i]=SCAN_PROTOS[i];
     }
     /*
      for (i = tcpi = udpi = sctpi = proti = 0; i <= 65535; i++) {
