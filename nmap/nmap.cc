@@ -2430,7 +2430,7 @@ void getpts_simple(const char *origexpr, int range_type,
                    unsigned short **list, int *count) {
     u8 *porttbl;
     int portwarning = 0;
-    int i, j;
+    int i;
     
     /* Make sure that only one bit in range_type is set (or that range_type is 0,
      which is useless but not incorrect). */
