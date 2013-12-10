@@ -2430,7 +2430,7 @@ void getpts_simple(const char *origexpr, int range_type,
                    unsigned short **list, int *count) {
     u8 *porttbl;
     int portwarning = 0;
-    unsigned int i, j;
+    int i, j;
     
     /* Make sure that only one bit in range_type is set (or that range_type is 0,
      which is useless but not incorrect). */
@@ -2441,7 +2441,7 @@ void getpts_simple(const char *origexpr, int range_type,
     /* Get the ports but do not allow changing the type with T:, U:, or P:. */
     getpts_aux(origexpr, 0, porttbl, range_type, &portwarning, false);
     
-    std::vector<u8> portVector;
+    std::vector<int> portVector;
     
     /* Count how many are set. */
     *count = 0;
