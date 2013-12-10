@@ -2449,11 +2449,10 @@ void getpts_simple(const char *origexpr, int range_type,
         if (porttbl[i] & range_type)
         {
             portVector.push_back(i);
-            (*count)++;
         }
     }
     
-    std::cout << "count : " << *count << "     size of vector: " << portVector.size() << std::endl;
+    *count = portVector.size();
     
     if (portVector.size() == 0) {
         free(porttbl);
@@ -2464,16 +2463,15 @@ void getpts_simple(const char *origexpr, int range_type,
     *list = (unsigned short *) safe_zalloc(portVector.size() * sizeof(unsigned short));
     
     /* Fill in the list. */
-    for (i = 0, j = 0; i <= 65535; i++) {
+    /*for (i = 0, j = 0; i <= 65535; i++) {
         if (porttbl[i] & range_type) {
             (*list)[j++] = i;
             std::cout << "i: " << i << std::endl;
         }
-    }
+    }*/
     
     for (i = 0; i < portVector.size(); i++) {
-        //(*list)[i] = portVector[i];
-        std::cout << "index:  " << i << "vector value: " << portVector[i] << std::endl;
+        (*list)[i] = portVector[i];
     }
     
     free(porttbl);
