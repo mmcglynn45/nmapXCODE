@@ -2465,13 +2465,16 @@ void getpts_simple(const char *origexpr, int range_type,
     
     /* Fill in the list. */
     for (i = 0, j = 0; i <= 65535; i++) {
-        if (porttbl[i] & range_type)
+        if (porttbl[i] & range_type) {
             (*list)[j++] = i;
+            std::cout << "i: " << i << std::endl;
+        }
     }
     
-    /*for (i = 0; i < portVector.size(); i++) {
-        (*list)[i] = portVector[i];
-    }*/
+    for (i = 0; i < portVector.size(); i++) {
+        //(*list)[i] = portVector[i];
+        std::cout << "index:  " << i << "vector value: " << portVector[i] << std::endl;
+    }
     
     free(porttbl);
 }
