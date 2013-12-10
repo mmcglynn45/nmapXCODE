@@ -2430,7 +2430,7 @@ void getpts_simple(const char *origexpr, int range_type,
                    unsigned short **list, int *count) {
     u8 *porttbl;
     int portwarning = 0;
-    unsigned int i;
+    unsigned int i, j;
     
     /* Make sure that only one bit in range_type is set (or that range_type is 0,
      which is useless but not incorrect). */
@@ -2449,6 +2449,7 @@ void getpts_simple(const char *origexpr, int range_type,
         if (porttbl[i] & range_type)
         {
             portVector.push_back(i);
+            *count++;
         }
     }
     
@@ -2461,14 +2462,14 @@ void getpts_simple(const char *origexpr, int range_type,
     *list = (unsigned short *) safe_zalloc(portVector.size() * sizeof(unsigned short));
     
     /* Fill in the list. */
-    /*for (i = 0, j = 0; i <= 65535; i++) {
+    for (i = 0, j = 0; i <= 65535; i++) {
         if (porttbl[i] & range_type)
             (*list)[j++] = i;
-    }*/
-    
-    for (i = 0; i < portVector.size(); i++) {
-        (*list)[i] = portVector[i];
     }
+    
+    /*for (i = 0; i < portVector.size(); i++) {
+        (*list)[i] = portVector[i];
+    }*/
     
     free(porttbl);
 }
